@@ -11,12 +11,12 @@ import (
 )
 
 type Line struct {
-	Content  string
-	Position int
+	Content string
+	Number  int
 }
 
 func main() {
-	isLineCountingEnabled := flag.Bool("n", false, "Count lines")
+	isLineNumberCountingEnabled := flag.Bool("n", false, "Count lines")
 	flag.Parse()
 
 	targetString := flag.Arg(0)
@@ -31,17 +31,17 @@ func main() {
 	scanner := bufio.NewScanner(file)
 
 	matchedLines := []Line{}
-	currentPositions := 1
+	currentLineNumber := 1
 
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), targetString) {
-			matchedLines = append(matchedLines, Line{Content: scanner.Text(), Position: currentPositions})
+			matchedLines = append(matchedLines, Line{Content: scanner.Text(), Number: currentLineNumber})
 		}
-		currentPositions++
+		currentLineNumber++
 	}
 
-	if *isLineCountingEnabled {
-		listLinesWithPosition(matchedLines, targetString)
+	if *isLineNumberCountingEnabled {
+		listLinesWithLineNumber(matchedLines, targetString)
 		return
 	}
 
@@ -54,9 +54,9 @@ func listLines(lines []Line, target string) {
 	}
 }
 
-func listLinesWithPosition(lines []Line, target string) {
+func listLinesWithLineNumber(lines []Line, target string) {
 	for _, line := range lines {
-		fmt.Printf("%d: %s\n", line.Position, reconstructLine(line.Content, target))
+		fmt.Printf("%d: %s\n", line.Number, reconstructLine(line.Content, target))
 	}
 }
 
